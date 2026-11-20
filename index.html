@@ -4,6 +4,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>とろ〜り焼きマシュマロ｜学祭出店</title>
+<script>
+  const orderBtn = document.getElementById("orderBtn");
+  const orderNote = document.getElementById("orderNote");
+
+  const orderUrl = "https://[2001:2c0:100:417:18:cafe:52:1]/order/3";
+
+  function updateOrderButton() {
+    const now = new Date();
+
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+
+    const minutes = now.getHours() * 60 + now.getMinutes();
+
+    const isEventDay =
+      month === 11 && (day === 21 || day === 22);
+
+    const isOpen =
+      minutes >= 10 * 60 && minutes <= 16 * 60 + 30;
+
+    if (isEventDay && isOpen) {
+      orderBtn.href = orderUrl;
+      orderBtn.classList.remove("disabled");
+      orderBtn.setAttribute("aria-disabled", "false");
+
+      orderNote.textContent = "ご注文いただけます！";
+    } else {
+      orderBtn.href = "#";
+      orderBtn.classList.add("disabled");
+      orderBtn.setAttribute("aria-disabled", "true");
+
+      orderNote.textContent =
+        "注文受付時間は11/21・11/22の10:00〜16:30です";
+    }
+  }
+
+  orderBtn.addEventListener("click", function(event) {
+    if (orderBtn.getAttribute("aria-disabled") === "true") {
+      event.preventDefault();
+    }
+  });
+
+  updateOrderButton();
+
+  setInterval(updateOrderButton, 1000);
+</script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap');
 
@@ -161,11 +207,17 @@
   <p class="sub">虹色祭限定出店</p>
 </div>
 
-<div class="order-box">
-  <div class="label">📱 ご注文はこちら</div>
-  <a href="https://[2001:2c0:100:417:18:cafe:52:1]/order/3" class="order-btn disabled">注文サイト</a>
-  <div class="note">開店時間になりましたら、こちらのボタンからアクセスできるようになります</div>
+<a id="orderBtn"
+   href="https://[2001:2c0:100:417:18:cafe:52:1]/order/3"
+   class="order-btn disabled"
+   aria-disabled="true">
+  注文サイト
+</a>
+
+<div class="note" id="orderNote">
+  開店時間になりましたら、こちらのボタンからアクセスできるようになります
 </div>
+
 
 <section>
   <div class="section-title">📍 開催情報</div>
